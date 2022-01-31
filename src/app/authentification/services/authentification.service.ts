@@ -1,25 +1,26 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { IUtilisateur } from '../models/i-utilisateur.interface';
-import { delay } from 'rxjs/operators';
+import { delay, tap } from 'rxjs/operators';
+import { ICredentials } from '../models/i-credentials.interface';
+import { MOCK_UTILISATEUR } from '../mocks/utilisateur.mock';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthentificationService {
-  public get utilisateur(): IUtilisateur | null {
-    return this._utilisateur;
-  }
-  private _utilisateur: IUtilisateur | null = null;
+  public utilisateur$;
+  private _utilisateur$: Subject<IUtilisateur> = new Subject();
 
-  public connecter$(credentials: { login: string; motDepasse: string }): Observable<IUtilisateur> {
-    const utilisateur = {
-      id: '123456',
-      nom: 'Mouse',
-      prenom: 'Mickey',
-    };
-    this._utilisateur = utilisateur;
-    return of(utilisateur).pipe(delay(2000));
+  public constructor() {
+    this.utilisateur$ = this._utilisateur$.asObservable();
+  }
+
+  public connecter$(credentials: ICredentials): Observable<IUtilisateur> {
+    return of(MOCK_UTILISATEUR).pipe(
+      delay(2000),
+      tap(() => this._utilisateur$.next(MOCK_UTILISATEUR))
+    );
   }
 
   public deconnecter$(): Observable<void> {

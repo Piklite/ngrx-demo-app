@@ -1,8 +1,3 @@
 <h1>NgRx demo app</h1>
-
-{{ utilisateur }}
-<p *ngIf="utilisateur">
-  Vous êtes connecté en tant que {{ utilisateur.prenom | titlecase }}
-  {{ utilisateur.nom | titlecase }}
-</p>
+<app-infos-utilisateur></app-infos-utilisateur>
 <router-outlet></router-outlet>

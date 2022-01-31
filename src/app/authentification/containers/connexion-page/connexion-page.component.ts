@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
-import { IUtilisateur } from '../../models/i-utilisateur.interface';
+import { ICredentials } from '../../models/i-credentials.interface';
 import { AuthentificationService } from '../../services/authentification.service';
 
 @Component({
@@ -12,22 +12,16 @@ import { AuthentificationService } from '../../services/authentification.service
 export class ConnexionPageComponent {
   public connexionEnCours: boolean = false;
 
-  public connexionForm = new FormGroup({
-    login: new FormControl(null, [Validators.required]),
-    motDePasse: new FormControl(null, [Validators.required]),
-  });
+  public constructor(private authentificationService: AuthentificationService, private router: Router) {}
 
-  public constructor(private authentificationService: AuthentificationService) {}
-
-  public connecter(): void {
-    const credentials = this.connexionForm.getRawValue();
+  public connecter(credentials: ICredentials): void {
     this.connexionEnCours = true;
     this.authentificationService
       .connecter$(credentials)
       .pipe(finalize(() => (this.connexionEnCours = false)))
       .subscribe({
-        next: (utilisateur: IUtilisateur) => console.log(utilisateur),
         error: (erreur: Error) => console.error(erreur),
+        complete: () => this.router.navigate(['/todo']),
       });
   }
 }

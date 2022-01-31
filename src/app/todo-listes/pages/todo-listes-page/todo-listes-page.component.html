@@ -1,0 +1,17 @@
+<h2>Todo listes</h2>
+
+<div *ngIf="todoListes$ | async as listes; else messageChargement">
+  <ul>
+    <li *ngFor="let liste of listes">
+      <a [routerLink]="[liste.id]" routerLinkActive="actif">{{ liste.libelle }}</a>
+    </li>
+    <!-- <li>
+      <a [routerLink]="['tous']" routerLinkActive="actif">Toutes les tâches</a>
+    </li> -->
+  </ul>
+  <router-outlet></router-outlet>
+</div>
+
+<ng-template #messageChargement>
+  <p>Chargement en cours ...</p>
+</ng-template>

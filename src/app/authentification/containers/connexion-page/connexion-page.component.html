@@ -1,14 +1,4 @@
-<form [formGroup]="connexionForm" (ngSubmit)="connecter()" *ngIf="!connexionEnCours; else messageChargement">
-  <div>
-    <label for="login">Login</label><br />
-    <input type="text" id="login" formControlName="login" />
-  </div>
-  <div>
-    <label for="motDePasse">Mot de passe</label><br />
-    <input type="password" id="motDePasse" formControlName="motDePasse" />
-  </div>
-  <button type="submit">Se connecter</button>
-</form>
+<app-connexion-form (submitted)="connecter($event)" *ngIf="!connexionEnCours; else messageChargement"></app-connexion-form>
 
 <ng-template #messageChargement>
   <p>Connexion en cours ...</p>
