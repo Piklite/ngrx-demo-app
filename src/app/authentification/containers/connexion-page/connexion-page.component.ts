@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { ICredentials } from '../../models/i-credentials.interface';
 import { AuthentificationService } from '../../services/authentification.service';
+import { PageConnexionActions } from '../../store/actions';
+import { selectConnexionEnCours } from '../../store/selectors/status-authentification.selectors';
 
 @Component({
   selector: 'app-connexion-page',
@@ -10,18 +14,11 @@ import { AuthentificationService } from '../../services/authentification.service
   styleUrls: ['./connexion-page.component.scss'],
 })
 export class ConnexionPageComponent {
-  public connexionEnCours: boolean = false;
+  public connexionEnCours$: Observable<boolean> = this.store.select(selectConnexionEnCours);
 
-  public constructor(private authentificationService: AuthentificationService, private router: Router) {}
+  public constructor(private store: Store) {}
 
   public connecter(credentials: ICredentials): void {
-    this.connexionEnCours = true;
-    this.authentificationService
-      .connecter$(credentials)
-      .pipe(finalize(() => (this.connexionEnCours = false)))
-      .subscribe({
-        error: (erreur: Error) => console.error(erreur),
-        complete: () => this.router.navigate(['/todos']),
-      });
+    this.store.dispatch(PageConnexionActions.connecter({ credentials }));
   }
 }

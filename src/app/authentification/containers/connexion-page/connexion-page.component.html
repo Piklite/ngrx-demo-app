@@ -1,4 +1,4 @@
-<app-connexion-form (submitted)="connecter($event)" *ngIf="!connexionEnCours; else messageChargement"></app-connexion-form>
+<app-connexion-form (submitted)="connecter($event)" *ngIf="!(connexionEnCours$ | async); else messageChargement"></app-connexion-form>
 
 <ng-template #messageChargement>
   <p>Connexion en cours ...</p>
