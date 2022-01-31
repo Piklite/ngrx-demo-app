@@ -21,7 +21,7 @@ export class ConnexionPageComponent {
       .pipe(finalize(() => (this.connexionEnCours = false)))
       .subscribe({
         error: (erreur: Error) => console.error(erreur),
-        complete: () => this.router.navigate(['/todo']),
+        complete: () => this.router.navigate(['/todos']),
       });
   }
 }
